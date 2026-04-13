@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    @apply bg-slate-950 text-slate-100 min-h-screen;
+  }
+}
+
+@layer utilities {
+  .chat-bubble-ai {
+    @apply bg-slate-800 text-slate-100 rounded-2xl rounded-tl-sm px-4 py-3 max-w-xs sm:max-w-sm;
+  }
+
+  .chat-bubble-client {
+    @apply bg-amber-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 max-w-xs sm:max-w-sm;
+  }
+
+  .mic-pulse {
+    animation: pulse-red 1.2s ease-in-out infinite;
+  }
+}
+
+@keyframes pulse-red {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
+  50% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+}
