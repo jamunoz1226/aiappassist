@@ -99,15 +99,8 @@ export default function Summary() {
         body: JSON.stringify({ summary, tier }),
       })
 
-      // #region agent log
-      fetch('http://127.0.0.1:7653/ingest/5874b0f7-a75e-4738-8e0d-c79217ecb465',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'975e86'},body:JSON.stringify({sessionId:'975e86',location:'Summary.jsx:101',message:'fetch response received',data:{status:res.status,ok:res.ok,url:res.url},runId:'run1',hypothesisId:'H-A',timestamp:Date.now()})}).catch(()=>{});
-      // #endregion
-
       if (!res.ok) {
         const body = await res.json().catch(() => ({}))
-        // #region agent log
-        fetch('http://127.0.0.1:7653/ingest/5874b0f7-a75e-4738-8e0d-c79217ecb465',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'975e86'},body:JSON.stringify({sessionId:'975e86',location:'Summary.jsx:106',message:'fetch failed - error path',data:{status:res.status,bodyMsg:body?.message??null},runId:'run1',hypothesisId:'H-B',timestamp:Date.now()})}).catch(()=>{});
-        // #endregion
         throw new Error(body.message || `Server error ${res.status}`)
       }
 
