@@ -56,7 +56,7 @@ export default function Prebrief() {
         <p className={`text-sm font-semibold uppercase tracking-widest mb-2 ${brief.color}`}>
           {brief.heading} · {brief.count}
         </p>
-        <h2 className="text-2xl font-bold text-white mb-4 leading-snug">
+        <h2 className="font-syne text-2xl font-bold text-white mb-4 leading-snug">
           Here&apos;s what we&apos;ll cover
         </h2>
         <p className="text-slate-300 text-base leading-relaxed mb-8">
