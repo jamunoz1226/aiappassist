@@ -51,13 +51,17 @@ export default function Chat() {
 
   const { messages, chips, isLoading, questionIndex, totalQuestions, startChat, sendMessage } = useChat(tier, handleIntakeComplete, mode)
 
+  // Tracks only finalized speech segments so interim previews never double-count
+  const committedTextRef = useRef('')
+
   // Handle voice transcript updates
   const handleTranscript = useCallback((text, isFinal) => {
-    // #region agent log
-    setInputText(prev => {
-      fetch('http://127.0.0.1:7653/ingest/5874b0f7-a75e-4738-8e0d-c79217ecb465',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'2dd59d'},body:JSON.stringify({sessionId:'2dd59d',location:'Chat.jsx:56',message:'handleTranscript called',data:{text,isFinal,prevInputText:prev},timestamp:Date.now(),hypothesisId:'H-A,H-B,H-C'})}).catch(()=>{})
-      return isFinal ? prev + text + ' ' : text
-    })
+    if (isFinal) {
+      committedTextRef.current += text + ' '
+      setInputText(committedTextRef.current)
+    } else {
+      setInputText(committedTextRef.current + text)
+    }
   }, [])
 
   const { isListening, startListening, stopListening, supported: voiceSupported } = useVoice(handleTranscript)
@@ -96,6 +100,7 @@ export default function Chat() {
     if (isListening) {
       stopListening()
     } else {
+      committedTextRef.current = ''
       setInputText('')
       startListening()
     }
