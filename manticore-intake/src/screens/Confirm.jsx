@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { Check } from 'lucide-react'
 import { useApp } from '../context/AppContext.jsx'
 
 export default function Confirm() {
@@ -16,8 +17,8 @@ export default function Confirm() {
     <div className="flex flex-col items-center justify-center flex-1 min-h-screen px-4 py-12 max-w-md mx-auto w-full text-center">
 
       {/* Success icon */}
-      <div className="w-20 h-20 rounded-full bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-4xl mb-6">
-        ✓
+      <div className="w-20 h-20 rounded-full bg-amber-500/20 border border-amber-500/40 flex items-center justify-center mb-6">
+        <Check className="w-10 h-10 text-amber-400" />
       </div>
 
       <h1 className="text-3xl font-bold text-white mb-3">You&apos;re all set!</h1>

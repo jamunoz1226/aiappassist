@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { ArrowLeft, ArrowRight, Check } from 'lucide-react'
 import { useApp } from '../context/AppContext.jsx'
 
 const BRIEFS = {
@@ -48,7 +49,7 @@ export default function Prebrief() {
         onClick={() => navigate('/intake')}
         className="self-start text-sm text-slate-500 hover:text-slate-300 transition-colors mb-8"
       >
-        ← Back
+        <ArrowLeft className="w-4 h-4 mr-1 inline" /> Back
       </button>
 
       {/* Card */}
@@ -64,16 +65,16 @@ export default function Prebrief() {
         </p>
 
         <ul className="space-y-2 mb-8 text-sm text-slate-400">
-          <li className="flex items-center gap-2"><span className={brief.color}>✓</span> One question at a time — no walls of text</li>
-          <li className="flex items-center gap-2"><span className={brief.color}>✓</span> Type or use your mic — your choice</li>
-          <li className="flex items-center gap-2"><span className={brief.color}>✓</span> Review and edit everything before we receive it</li>
+          <li className="flex items-center gap-2"><Check className={`w-4 h-4 shrink-0 ${brief.color}`} /> One question at a time — no walls of text</li>
+          <li className="flex items-center gap-2"><Check className={`w-4 h-4 shrink-0 ${brief.color}`} /> Type or use your mic — your choice</li>
+          <li className="flex items-center gap-2"><Check className={`w-4 h-4 shrink-0 ${brief.color}`} /> Review and edit everything before we receive it</li>
         </ul>
 
         <button
           onClick={() => navigate('/chat')}
           className="w-full py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-950 font-semibold text-base transition-colors"
         >
-          Let&apos;s go →
+          <span className="inline-flex items-center gap-1.5">Let&apos;s go <ArrowRight className="w-4 h-4" /></span>
         </button>
       </div>
     </div>

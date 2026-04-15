@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { ArrowLeft, ArrowRight, Mic } from 'lucide-react'
 import { useApp } from '../context/AppContext.jsx'
 import { useChat } from '../hooks/useChat.js'
 import { useVoice } from '../hooks/useVoice.js'
@@ -124,7 +125,7 @@ export default function Chat() {
           className="text-sm text-slate-400 hover:text-slate-200 transition-colors text-left"
           style={{ minHeight: '44px', display: 'flex', alignItems: 'center' }}
         >
-          ← Change survey length
+          <ArrowLeft className="w-4 h-4 mr-1" /> Change survey length
         </button>
       </div>
 
@@ -168,7 +169,7 @@ export default function Chat() {
                   : 'bg-slate-800 border border-slate-700 text-slate-400 hover:border-amber-500 hover:text-amber-400'
               }`}
             >
-              🎙
+              <Mic className="w-5 h-5" />
             </button>
           )}
 
@@ -178,7 +179,7 @@ export default function Chat() {
             disabled={isLoading || !inputText.trim()}
             className="w-11 h-11 rounded-xl bg-amber-500 hover:bg-amber-400 active:bg-amber-600 flex items-center justify-center shrink-0 text-slate-950 font-bold text-lg disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
-            →
+            <ArrowRight className="w-5 h-5" />
           </button>
         </div>
       </div>

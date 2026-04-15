@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { ArrowRight, Pencil } from 'lucide-react'
 import { useApp } from '../context/AppContext.jsx'
 
 // Generic editable field row
@@ -34,7 +35,7 @@ function Field({ label, value, onChange }) {
           className="flex-1 text-left text-sm text-slate-200 hover:text-amber-300 transition-colors group"
         >
           {Array.isArray(display) ? display.join(', ') : String(display)}
-          <span className="ml-2 text-xs text-slate-600 group-hover:text-amber-500 opacity-0 group-hover:opacity-100 transition-opacity">✎ edit</span>
+          <span className="ml-2 inline-flex items-center gap-0.5 text-xs text-slate-600 group-hover:text-amber-500 opacity-0 group-hover:opacity-100 transition-opacity"><Pencil className="w-3 h-3" /> edit</span>
         </button>
       )}
     </div>
@@ -117,8 +118,8 @@ export default function Summary() {
   const s = summary
 
   const submitLabel = mode === 'feedback'
-    ? 'Send feedback to Manticore →'
-    : 'Looks good — send it to Manticore →'
+    ? <span className="inline-flex items-center gap-1.5">Send feedback to Manticore <ArrowRight className="w-4 h-4" /></span>
+    : <span className="inline-flex items-center gap-1.5">Looks good — send it to Manticore <ArrowRight className="w-4 h-4" /></span>
 
   const summaryTitle = mode === 'feedback' ? 'Your feedback summary' : 'Your intake summary'
 

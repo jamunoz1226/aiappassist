@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { ArrowLeft, ArrowRight, Check } from 'lucide-react'
 import { useApp } from '../context/AppContext.jsx'
 
 const TIERS = [
@@ -93,6 +94,14 @@ export default function Welcome() {
         <div className="absolute inset-0 bg-slate-950/30 rounded-2xl" />
       </div>
 
+      {/* Back Navigation */}
+      <button
+        onClick={() => navigate('/')}
+        className="self-start text-sm text-slate-500 hover:text-slate-300 transition-colors mb-6"
+      >
+        <ArrowLeft className="w-4 h-4 mr-1 inline" /> Back
+      </button>
+
       {/* Tier Cards */}
       <div className="grid gap-4 w-full sm:grid-cols-3">
         {TIERS.map((tier, index) => (
@@ -119,14 +128,14 @@ export default function Welcome() {
             <ul className="space-y-1.5 mt-auto">
               {tier.topics.map((t) => (
                 <li key={t} className="flex items-start gap-2 text-sm text-slate-300">
-                  <span className={`mt-0.5 shrink-0 ${tier.check}`}>✓</span>
+                  <Check className={`w-4 h-4 mt-0.5 shrink-0 ${tier.check}`} />
                   {t}
                 </li>
               ))}
             </ul>
 
             <div className="mt-5 text-center text-sm font-medium text-slate-400 group-hover:text-white transition-colors">
-              Select →
+              <span className="inline-flex items-center gap-1">Select <ArrowRight className="w-4 h-4" /></span>
             </div>
           </button>
         ))}
