@@ -50,11 +50,6 @@ export default function Chat() {
     }
   }, [setGlobalMessages, setSummary, navigate])
 
-  // #region agent log
-  console.error('[DBG c6ed96][Chat.jsx:52][H-A] Chat rendered past handleIntakeComplete — no crash yet, tier:', tier, 'mode:', mode);
-  fetch('http://127.0.0.1:7653/ingest/5874b0f7-a75e-4738-8e0d-c79217ecb465',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'c6ed96'},body:JSON.stringify({sessionId:'c6ed96',location:'Chat.jsx:52',message:'Chat rendered past handleIntakeComplete — no crash yet',data:{tier,mode},timestamp:Date.now(),runId:'run1',hypothesisId:'H-A'})}).catch(()=>{})
-  // #endregion
-
   const { messages, chips, isLoading, questionIndex, totalQuestions, startChat, sendMessage } = useChat(tier, handleIntakeComplete, mode)
 
   // Tracks only finalized speech segments so interim previews never double-count

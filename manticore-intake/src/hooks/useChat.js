@@ -7,12 +7,19 @@ import {
 
 const INTAKE_COMPLETE_SIGNAL = '[INTAKE_COMPLETE]'
 
-/**
- * Manages the chat conversation with Gemini.
- * @param {number} tier - 2 | 5 | 10
- * @param {Function} onIntakeComplete - called when all questions are answered
- * @param {'intake'|'feedback'} mode - which survey flow is active
- */
+function parseGeminiError(err) {
+  const msg = err.message ?? ''
+  const is429 = msg.includes('429') || msg.includes('RESOURCE_EXHAUSTED') || msg.includes('quota')
+  if (is429) {
+    const match = msg.match(/retry.*?(\d+)s/i) ?? msg.match(/(\d+)s/)
+    if (match) {
+      return `We've hit the daily AI limit. Please wait about ${match[1]} seconds and try again, or come back tomorrow.`
+    }
+    return "We've hit the daily AI limit. Please try again in a few minutes, or come back tomorrow."
+  }
+  return 'Something went wrong. Please try again.'
+}
+
 export function useChat(tier, onIntakeComplete, mode = 'intake') {
   const [messages, setMessages] = useState([])
   const [chips, setChips] = useState([])
@@ -85,7 +92,7 @@ export function useChat(tier, onIntakeComplete, mode = 'intake') {
     } catch (err) {
       setMessages(prev => [
         ...prev.slice(0, -1),
-        { role: 'ai', text: `Sorry, there was an error connecting to the AI. Please check your API key and try again.\n\n${err.message}` },
+        { role: 'ai', text: parseGeminiError(err) },
       ])
     } finally {
       setIsLoading(false)
@@ -129,7 +136,7 @@ export function useChat(tier, onIntakeComplete, mode = 'intake') {
     } catch (err) {
       setMessages(prev => [
         ...prev.slice(0, -1),
-        { role: 'ai', text: `Something went wrong. Please try again.\n\n${err.message}` },
+        { role: 'ai', text: parseGeminiError(err) },
       ])
     } finally {
       setIsLoading(false)

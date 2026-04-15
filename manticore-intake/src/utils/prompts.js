@@ -88,6 +88,8 @@ export function buildSummaryPrompt(messages) {
 CONVERSATION:
 ${conversation}
 
+Also populate the ownerPrompt field with a detailed, ready-to-paste AI project brief a developer could drop into Cursor or ChatGPT to begin building this client's website. Write it as a direct instruction to an AI assistant, in 2–4 paragraphs covering: who the business is and what they do, their primary goal and target customer, design direction (vibe, colors, assets), features and pages to build, integrations/timeline/budget if provided. End with: Build a modern, responsive website matching these specs.
+
 Return ONLY valid JSON with this exact structure (use null for any field not mentioned):
 {
   "businessInfo": {
@@ -117,7 +119,8 @@ Return ONLY valid JSON with this exact structure (use null for any field not men
   "timeline": "",
   "budget": "",
   "maintenancePlan": "",
-  "additionalNotes": ""
+  "additionalNotes": "",
+  "ownerPrompt": ""
 }`
 }
 

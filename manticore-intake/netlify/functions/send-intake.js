@@ -30,6 +30,7 @@ function buildHtml(summary, tier, id) {
     td:first-child { color: #94a3b8; width: 160px; font-size: 12px; padding-right: 12px; }
     tr:last-child td { border-bottom: none; }
     .id { font-size: 11px; color: #94a3b8; margin-top: 20px; }
+    .prompt-card { background: #fffbeb; border-color: #fcd34d; }
   </style>
 </head>
 <body>
@@ -93,6 +94,13 @@ function buildHtml(summary, tier, id) {
       <tr><td>Additional notes</td><td>${val(s.additionalNotes)}</td></tr>
     </table>
   </div>
+
+  ${s.ownerPrompt ? `<div class="card prompt-card">
+    <h2>AI Project Brief — Copy &amp; Paste into Cursor / ChatGPT</h2>
+    <p style="white-space: pre-wrap; font-family: monospace; font-size: 13px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; line-height: 1.6; color: #1e293b;">
+      ${val(s.ownerPrompt)}
+    </p>
+  </div>` : ''}
 
   <p class="id">Sent via Manticore Client Intake PWA · ${new Date().toUTCString()}</p>
 </body>

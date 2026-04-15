@@ -58,10 +58,6 @@ export default function FeedbackWelcome() {
   const { setTier } = useApp()
   const navigate = useNavigate()
 
-  // #region agent log
-  console.error('[DBG c6ed96][FeedbackWelcome.jsx][H-D] FeedbackWelcome rendered, setTier type:', typeof setTier);
-  fetch('http://127.0.0.1:7653/ingest/5874b0f7-a75e-4738-8e0d-c79217ecb465',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'c6ed96'},body:JSON.stringify({sessionId:'c6ed96',location:'FeedbackWelcome.jsx:58',message:'FeedbackWelcome rendered',data:{setTierType:typeof setTier},timestamp:Date.now(),runId:'run1',hypothesisId:'H-D'})}).catch(()=>{})
-  // #endregion
 
   function handleSelect(minutes) {
     setTier(minutes)
