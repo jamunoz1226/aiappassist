@@ -32,6 +32,9 @@ export function useVoice(onTranscript) {
           interim += transcript
         }
       }
+      // #region agent log
+      fetch('http://127.0.0.1:7653/ingest/5874b0f7-a75e-4738-8e0d-c79217ecb465',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'2dd59d'},body:JSON.stringify({sessionId:'2dd59d',location:'useVoice.js:36',message:'onresult fired',data:{resultIndex:event.resultIndex,resultsLength:event.results.length,final,interim,computedIsFinal:event.results[event.results.length-1].isFinal},timestamp:Date.now(),hypothesisId:'H-B,H-C'})}).catch(()=>{})
+      // #endregion
       // Send both so the textarea can show interim results in real time
       onTranscript(final || interim, event.results[event.results.length - 1].isFinal)
     }

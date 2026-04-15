@@ -3,38 +3,37 @@ import { useApp } from '../context/AppContext.jsx'
 
 const BRIEFS = {
   2: {
-    heading: 'Quick Snapshot',
-    body: "In just a few questions, we'll grab the core details about your business and what you need from your new website. This is fast, friction-free, and gives our team everything to get started.",
-    count: '5 questions',
+    heading: 'Quick Impression',
+    body: "In just a few questions, we'll capture your first impressions and the most important things you'd like to change. Quick, focused, and immediately useful for our team.",
+    count: '6 questions',
     color: 'text-sky-400',
     border: 'border-sky-500/30',
     bg: 'bg-sky-500/10',
   },
   5: {
-    heading: 'Full Picture',
-    body: "We'll cover everything from your ideal customer and brand vibe to the features you need. By the end, our team will have a complete picture of your vision — no back-and-forth needed.",
+    heading: 'Full Review',
+    body: "We'll cover the full picture — design, navigation, content, mobile feel, and what's missing. By the end, our team will have a clear list of refinements to action.",
     count: '12 questions',
     color: 'text-amber-400',
     border: 'border-amber-500/30',
     bg: 'bg-amber-500/10',
   },
   10: {
-    heading: 'Deep Dive',
-    body: "This is the full consultation — competitors, content, integrations, budget, timeline. When you're done, we'll have everything we need to design something truly built for your business.",
-    count: '20 questions',
+    heading: 'Deep Critique',
+    body: "This is the complete review — competitors, brand alignment, copy quality, integrations, and more. When you're done, we'll have everything we need to take your site to the next level.",
+    count: '17 questions',
     color: 'text-violet-400',
     border: 'border-violet-500/30',
     bg: 'bg-violet-500/10',
   },
 }
 
-export default function Prebrief() {
+export default function FeedbackPrebrief() {
   const { tier } = useApp()
   const navigate = useNavigate()
 
-  // Guard: if someone lands here without selecting a tier, redirect
   if (!tier) {
-    navigate('/intake')
+    navigate('/feedback')
     return null
   }
 
@@ -45,7 +44,7 @@ export default function Prebrief() {
 
       {/* Back link */}
       <button
-        onClick={() => navigate('/intake')}
+        onClick={() => navigate('/feedback')}
         className="self-start text-sm text-slate-500 hover:text-slate-300 transition-colors mb-8"
       >
         ← Back

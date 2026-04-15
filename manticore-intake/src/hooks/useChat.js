@@ -1,19 +1,26 @@
 import { useState, useCallback } from 'react'
 import { streamChatMessage } from '../utils/gemini.js'
-import { buildSystemPrompt, QUESTION_BANKS } from '../utils/prompts.js'
+import {
+  buildSystemPrompt, QUESTION_BANKS,
+  buildFeedbackSystemPrompt, FEEDBACK_QUESTION_BANKS,
+} from '../utils/prompts.js'
 
 const INTAKE_COMPLETE_SIGNAL = '[INTAKE_COMPLETE]'
 
 /**
  * Manages the chat conversation with Gemini.
+ * @param {number} tier - 2 | 5 | 10
+ * @param {Function} onIntakeComplete - called when all questions are answered
+ * @param {'intake'|'feedback'} mode - which survey flow is active
  */
-export function useChat(tier, onIntakeComplete) {
+export function useChat(tier, onIntakeComplete, mode = 'intake') {
   const [messages, setMessages] = useState([])
   const [chips, setChips] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [questionIndex, setQuestionIndex] = useState(0)
 
-  const totalQuestions = QUESTION_BANKS[tier]?.length ?? 5
+  const questionBanks = mode === 'feedback' ? FEEDBACK_QUESTION_BANKS : QUESTION_BANKS
+  const totalQuestions = questionBanks[tier]?.length ?? 5
 
   /**
    * Parse AI response to extract message text and suggestion chips.
@@ -47,7 +54,7 @@ export function useChat(tier, onIntakeComplete) {
     if (isLoading || messages.length > 0) return
     setIsLoading(true)
 
-    const systemPrompt = buildSystemPrompt(tier)
+    const systemPrompt = mode === 'feedback' ? buildFeedbackSystemPrompt(tier) : buildSystemPrompt(tier)
 
     // Seed with a silent "start" message so Gemini asks question 1
     const seed = [{ role: 'user', text: 'Hello, I\'m ready to get started.' }]
@@ -83,7 +90,7 @@ export function useChat(tier, onIntakeComplete) {
     } finally {
       setIsLoading(false)
     }
-  }, [tier, isLoading, messages.length, onIntakeComplete])
+  }, [tier, mode, isLoading, messages.length, onIntakeComplete])
 
   /**
    * Send a user message and stream the AI reply.
@@ -97,7 +104,7 @@ export function useChat(tier, onIntakeComplete) {
     setIsLoading(true)
     setChips([])
 
-    const systemPrompt = buildSystemPrompt(tier)
+    const systemPrompt = mode === 'feedback' ? buildFeedbackSystemPrompt(tier) : buildSystemPrompt(tier)
 
     try {
       let fullResponse = ''
@@ -127,7 +134,7 @@ export function useChat(tier, onIntakeComplete) {
     } finally {
       setIsLoading(false)
     }
-  }, [messages, isLoading, tier, totalQuestions, onIntakeComplete])
+  }, [messages, isLoading, tier, mode, totalQuestions, onIntakeComplete])
 
   return {
     messages,

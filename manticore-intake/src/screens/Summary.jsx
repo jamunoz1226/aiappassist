@@ -52,13 +52,13 @@ function Section({ title, children }) {
 }
 
 export default function Summary() {
-  const { summary, setSummary, tier, setSubmissionId } = useApp()
+  const { summary, setSummary, tier, mode, setSubmissionId } = useApp()
   const navigate = useNavigate()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState(null)
 
   if (!tier) {
-    navigate('/')
+    navigate(mode === 'feedback' ? '/feedback' : '/intake')
     return null
   }
 
@@ -116,68 +116,124 @@ export default function Summary() {
 
   const s = summary
 
+  const submitLabel = mode === 'feedback'
+    ? 'Send feedback to Manticore →'
+    : 'Looks good — send it to Manticore →'
+
+  const summaryTitle = mode === 'feedback' ? 'Your feedback summary' : 'Your intake summary'
+
   return (
     <div className="max-w-2xl mx-auto w-full px-4 py-8">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-white mb-1">Your intake summary</h2>
+        <h2 className="text-2xl font-bold text-white mb-1">{summaryTitle}</h2>
         <p className="text-slate-400 text-sm">Review everything before we send it. Tap any field to edit it inline.</p>
       </div>
 
-      <Section title="Business Info">
-        <Field label="Business name" value={s.businessInfo?.name} onChange={v => updateField('businessInfo.name', v)} />
-        <Field label="Type / industry" value={s.businessInfo?.type} onChange={v => updateField('businessInfo.type', v)} />
-        <Field label="Location" value={s.businessInfo?.location} onChange={v => updateField('businessInfo.location', v)} />
-        <Field label="Contact info" value={s.businessInfo?.contact} onChange={v => updateField('businessInfo.contact', v)} />
-        <Field label="Current website" value={s.currentWebsite} onChange={v => updateField('currentWebsite', v)} />
-      </Section>
+      {mode === 'feedback' ? (
+        <>
+          <Section title="Reviewed Site">
+            <Field label="Site URL" value={s.reviewedSite} onChange={v => updateField('reviewedSite', v)} />
+            <Field label="Overall score" value={s.overallScore} onChange={v => updateField('overallScore', v)} />
+            <Field label="First impression" value={s.firstImpression} onChange={v => updateField('firstImpression', v)} />
+          </Section>
 
-      <Section title="Goals & Audience">
-        <Field label="Primary goal" value={s.primaryGoal} onChange={v => updateField('primaryGoal', v)} />
-        <Field label="Target customer" value={s.targetCustomer} onChange={v => updateField('targetCustomer', v)} />
-        <Field label="Unique value" value={s.uniqueValue} onChange={v => updateField('uniqueValue', v)} />
-      </Section>
+          <Section title="Design & Navigation">
+            <Field label="Design feedback" value={s.designFeedback} onChange={v => updateField('designFeedback', v)} />
+            <Field label="Navigation feedback" value={s.navigationFeedback} onChange={v => updateField('navigationFeedback', v)} />
+            <Field label="Mobile feedback" value={s.mobileFeedback} onChange={v => updateField('mobileFeedback', v)} />
+            <Field label="CTA clarity" value={s.ctaClarity} onChange={v => updateField('ctaClarity', v)} />
+          </Section>
 
-      <Section title="Design Preferences">
-        <Field label="Vibe / style" value={s.designPreferences?.vibe} onChange={v => updateField('designPreferences.vibe', v)} />
-        <Field label="Colors" value={s.designPreferences?.colors} onChange={v => updateField('designPreferences.colors', v)} />
-        <Field label="Has logo?" value={s.designPreferences?.logo} onChange={v => updateField('designPreferences.logo', v)} />
-        <Field
-          label="Inspiration URLs"
-          value={Array.isArray(s.designPreferences?.inspirationUrls) ? s.designPreferences.inspirationUrls.join(', ') : s.designPreferences?.inspirationUrls}
-          onChange={v => updateField('designPreferences.inspirationUrls', v.split(',').map(x => x.trim()))}
-        />
-      </Section>
+          <Section title="Content & Brand">
+            <Field label="Content feedback" value={s.contentFeedback} onChange={v => updateField('contentFeedback', v)} />
+            <Field label="Brand alignment" value={s.brandAlignment} onChange={v => updateField('brandAlignment', v)} />
+            <Field label="Copy feedback" value={s.copyFeedback} onChange={v => updateField('copyFeedback', v)} />
+          </Section>
 
-      <Section title="Features & Pages">
-        <Field
-          label="Features needed"
-          value={Array.isArray(s.featuresNeeded) ? s.featuresNeeded.join(', ') : s.featuresNeeded}
-          onChange={v => updateField('featuresNeeded', v.split(',').map(x => x.trim()))}
-        />
-        <Field
-          label="Pages"
-          value={Array.isArray(s.pages) ? s.pages.join(', ') : s.pages}
-          onChange={v => updateField('pages', v.split(',').map(x => x.trim()))}
-        />
-        <Field
-          label="Integrations"
-          value={Array.isArray(s.integrations) ? s.integrations.join(', ') : s.integrations}
-          onChange={v => updateField('integrations', v.split(',').map(x => x.trim()))}
-        />
-      </Section>
+          <Section title="Top Feedback">
+            <Field
+              label="What you love"
+              value={Array.isArray(s.topLikes) ? s.topLikes.join(', ') : s.topLikes}
+              onChange={v => updateField('topLikes', v.split(',').map(x => x.trim()))}
+            />
+            <Field
+              label="Top changes"
+              value={Array.isArray(s.topChanges) ? s.topChanges.join(', ') : s.topChanges}
+              onChange={v => updateField('topChanges', v.split(',').map(x => x.trim()))}
+            />
+            <Field
+              label="Missing elements"
+              value={Array.isArray(s.missingElements) ? s.missingElements.join(', ') : s.missingElements}
+              onChange={v => updateField('missingElements', v.split(',').map(x => x.trim()))}
+            />
+            <Field label="Competitor notes" value={s.competitorNotes} onChange={v => updateField('competitorNotes', v)} />
+            <Field label="Integration gaps" value={s.integrationGaps} onChange={v => updateField('integrationGaps', v)} />
+          </Section>
 
-      <Section title="Content & Assets">
-        <Field label="Has photos?" value={s.contentAssets?.hasPhotos} onChange={v => updateField('contentAssets.hasPhotos', v)} />
-        <Field label="Has logo file?" value={s.contentAssets?.hasLogo} onChange={v => updateField('contentAssets.hasLogo', v)} />
-        <Field label="Has copy/text?" value={s.contentAssets?.hasCopy} onChange={v => updateField('contentAssets.hasCopy', v)} />
-      </Section>
+          <Section title="Contact & Notes">
+            <Field label="Follow-up contact" value={s.contact} onChange={v => updateField('contact', v)} />
+            <Field label="Additional notes" value={s.additionalNotes} onChange={v => updateField('additionalNotes', v)} />
+          </Section>
+        </>
+      ) : (
+        <>
+          <Section title="Business Info">
+            <Field label="Business name" value={s.businessInfo?.name} onChange={v => updateField('businessInfo.name', v)} />
+            <Field label="Type / industry" value={s.businessInfo?.type} onChange={v => updateField('businessInfo.type', v)} />
+            <Field label="Location" value={s.businessInfo?.location} onChange={v => updateField('businessInfo.location', v)} />
+            <Field label="Contact info" value={s.businessInfo?.contact} onChange={v => updateField('businessInfo.contact', v)} />
+            <Field label="Current website" value={s.currentWebsite} onChange={v => updateField('currentWebsite', v)} />
+          </Section>
 
-      <Section title="Timeline, Budget & Notes">
-        <Field label="Timeline" value={s.timeline} onChange={v => updateField('timeline', v)} />
-        <Field label="Budget range" value={s.budget} onChange={v => updateField('budget', v)} />
-        <Field label="Maintenance plan" value={s.maintenancePlan} onChange={v => updateField('maintenancePlan', v)} />
-        <Field label="Additional notes" value={s.additionalNotes} onChange={v => updateField('additionalNotes', v)} />
-      </Section>
+          <Section title="Goals & Audience">
+            <Field label="Primary goal" value={s.primaryGoal} onChange={v => updateField('primaryGoal', v)} />
+            <Field label="Target customer" value={s.targetCustomer} onChange={v => updateField('targetCustomer', v)} />
+            <Field label="Unique value" value={s.uniqueValue} onChange={v => updateField('uniqueValue', v)} />
+          </Section>
+
+          <Section title="Design Preferences">
+            <Field label="Vibe / style" value={s.designPreferences?.vibe} onChange={v => updateField('designPreferences.vibe', v)} />
+            <Field label="Colors" value={s.designPreferences?.colors} onChange={v => updateField('designPreferences.colors', v)} />
+            <Field label="Has logo?" value={s.designPreferences?.logo} onChange={v => updateField('designPreferences.logo', v)} />
+            <Field
+              label="Inspiration URLs"
+              value={Array.isArray(s.designPreferences?.inspirationUrls) ? s.designPreferences.inspirationUrls.join(', ') : s.designPreferences?.inspirationUrls}
+              onChange={v => updateField('designPreferences.inspirationUrls', v.split(',').map(x => x.trim()))}
+            />
+          </Section>
+
+          <Section title="Features & Pages">
+            <Field
+              label="Features needed"
+              value={Array.isArray(s.featuresNeeded) ? s.featuresNeeded.join(', ') : s.featuresNeeded}
+              onChange={v => updateField('featuresNeeded', v.split(',').map(x => x.trim()))}
+            />
+            <Field
+              label="Pages"
+              value={Array.isArray(s.pages) ? s.pages.join(', ') : s.pages}
+              onChange={v => updateField('pages', v.split(',').map(x => x.trim()))}
+            />
+            <Field
+              label="Integrations"
+              value={Array.isArray(s.integrations) ? s.integrations.join(', ') : s.integrations}
+              onChange={v => updateField('integrations', v.split(',').map(x => x.trim()))}
+            />
+          </Section>
+
+          <Section title="Content & Assets">
+            <Field label="Has photos?" value={s.contentAssets?.hasPhotos} onChange={v => updateField('contentAssets.hasPhotos', v)} />
+            <Field label="Has logo file?" value={s.contentAssets?.hasLogo} onChange={v => updateField('contentAssets.hasLogo', v)} />
+            <Field label="Has copy/text?" value={s.contentAssets?.hasCopy} onChange={v => updateField('contentAssets.hasCopy', v)} />
+          </Section>
+
+          <Section title="Timeline, Budget & Notes">
+            <Field label="Timeline" value={s.timeline} onChange={v => updateField('timeline', v)} />
+            <Field label="Budget range" value={s.budget} onChange={v => updateField('budget', v)} />
+            <Field label="Maintenance plan" value={s.maintenancePlan} onChange={v => updateField('maintenancePlan', v)} />
+            <Field label="Additional notes" value={s.additionalNotes} onChange={v => updateField('additionalNotes', v)} />
+          </Section>
+        </>
+      )}
 
       {error && (
         <div className="mb-4 p-4 bg-red-900/30 border border-red-700 rounded-xl text-sm text-red-300">
@@ -191,7 +247,7 @@ export default function Summary() {
           disabled={isSubmitting}
           className="w-full py-4 rounded-xl bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-950 font-semibold text-base transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isSubmitting ? 'Sending…' : 'Looks good — send it to Manticore →'}
+          {isSubmitting ? 'Sending…' : submitLabel}
         </button>
         <button
           onClick={() => navigate('/chat')}

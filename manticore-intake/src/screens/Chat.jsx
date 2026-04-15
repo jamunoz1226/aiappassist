@@ -4,13 +4,13 @@ import { useApp } from '../context/AppContext.jsx'
 import { useChat } from '../hooks/useChat.js'
 import { useVoice } from '../hooks/useVoice.js'
 import { generateSummary } from '../utils/gemini.js'
-import { buildSummaryPrompt } from '../utils/prompts.js'
+import { buildSummaryPrompt, buildFeedbackSummaryPrompt } from '../utils/prompts.js'
 import ChatBubble from '../components/ChatBubble.jsx'
 import ProgressBar from '../components/ProgressBar.jsx'
 import SuggestionChips from '../components/SuggestionChips.jsx'
 
 export default function Chat() {
-  const { tier, setMessages: setGlobalMessages, setSummary } = useApp()
+  const { tier, mode, setMessages: setGlobalMessages, setSummary } = useApp()
   const navigate = useNavigate()
   const [inputText, setInputText] = useState('')
   const [isGeneratingSummary, setIsGeneratingSummary] = useState(false)
@@ -18,7 +18,7 @@ export default function Chat() {
   const textareaRef = useRef(null)
 
   if (!tier) {
-    navigate('/')
+    navigate(mode === 'feedback' ? '/feedback' : '/intake')
     return null
   }
 
@@ -28,7 +28,9 @@ export default function Chat() {
     setIsGeneratingSummary(true)
 
     try {
-      const prompt = buildSummaryPrompt(finalMessages)
+      const prompt = mode === 'feedback'
+        ? buildFeedbackSummaryPrompt(finalMessages)
+        : buildSummaryPrompt(finalMessages)
       const rawJson = await generateSummary(prompt)
 
       // Strip markdown code fences if Gemini wraps JSON in them
@@ -47,11 +49,15 @@ export default function Chat() {
     }
   }, [setGlobalMessages, setSummary, navigate])
 
-  const { messages, chips, isLoading, questionIndex, totalQuestions, startChat, sendMessage } = useChat(tier, handleIntakeComplete)
+  const { messages, chips, isLoading, questionIndex, totalQuestions, startChat, sendMessage } = useChat(tier, handleIntakeComplete, mode)
 
   // Handle voice transcript updates
   const handleTranscript = useCallback((text, isFinal) => {
-    setInputText(prev => isFinal ? prev + text + ' ' : text)
+    // #region agent log
+    setInputText(prev => {
+      fetch('http://127.0.0.1:7653/ingest/5874b0f7-a75e-4738-8e0d-c79217ecb465',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'2dd59d'},body:JSON.stringify({sessionId:'2dd59d',location:'Chat.jsx:56',message:'handleTranscript called',data:{text,isFinal,prevInputText:prev},timestamp:Date.now(),hypothesisId:'H-A,H-B,H-C'})}).catch(()=>{})
+      return isFinal ? prev + text + ' ' : text
+    })
   }, [])
 
   const { isListening, startListening, stopListening, supported: voiceSupported } = useVoice(handleTranscript)
@@ -109,7 +115,7 @@ export default function Chat() {
       {/* Back button — navigates to /prebrief without resetting tier or messages */}
       <div className="px-4 pt-3 pb-1">
         <button
-          onClick={() => navigate('/prebrief')}
+          onClick={() => navigate(mode === 'feedback' ? '/feedback/prebrief' : '/prebrief')}
           className="text-sm text-slate-400 hover:text-slate-200 transition-colors text-left"
           style={{ minHeight: '44px', display: 'flex', alignItems: 'center' }}
         >
