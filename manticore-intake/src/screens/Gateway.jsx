@@ -6,6 +6,11 @@ export default function Gateway() {
   const { setMode } = useApp()
   const navigate = useNavigate()
 
+  // #region agent log
+  console.error('[DBG c6ed96][Gateway.jsx][H-B] Gateway rendered, setMode type:', typeof setMode);
+  fetch('http://127.0.0.1:7653/ingest/5874b0f7-a75e-4738-8e0d-c79217ecb465',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'c6ed96'},body:JSON.stringify({sessionId:'c6ed96',location:'Gateway.jsx:6',message:'Gateway rendered',data:{setModeType:typeof setMode},timestamp:Date.now(),runId:'run1',hypothesisId:'H-B'})}).catch(()=>{})
+  // #endregion
+
   function handleIntake() {
     setMode('intake')
     navigate('/intake')
