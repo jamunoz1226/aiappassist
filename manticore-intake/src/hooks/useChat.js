@@ -8,10 +8,18 @@ import {
 const INTAKE_COMPLETE_SIGNAL = '[INTAKE_COMPLETE]'
 
 function parseGeminiError(err) {
+  // #region agent log
+  console.error('[DBG-5b1d79] parseGeminiError called', {errMessage: err?.message, errCauseMessage: err?.cause?.message, errKeys: Object.keys(err ?? {}), errStringified: JSON.stringify(err)?.slice(0, 400)})
+  // #endregion
   const msg = err.message ?? ''
-  const is429 = msg.includes('429') || msg.includes('RESOURCE_EXHAUSTED') || msg.includes('quota')
+  const causeMsg = err.cause?.message ?? ''
+  const full = msg + ' ' + causeMsg + ' ' + JSON.stringify(err)
+  const is429 = full.includes('429') || full.includes('RESOURCE_EXHAUSTED') || full.includes('quota')
+  // #region agent log
+  console.error('[DBG-5b1d79] is429 check', {is429, msgSnippet: msg.slice(0, 200), causeMsgSnippet: causeMsg.slice(0, 200)})
+  // #endregion
   if (is429) {
-    const match = msg.match(/retry.*?(\d+)s/i) ?? msg.match(/(\d+)s/)
+    const match = full.match(/retry.*?(\d+)s/i) ?? full.match(/(\d+)s/)
     if (match) {
       return `We've hit the daily AI limit. Please wait about ${match[1]} seconds and try again, or come back tomorrow.`
     }
@@ -90,10 +98,10 @@ export function useChat(tier, onIntakeComplete, mode = 'intake') {
 
       if (isComplete) onIntakeComplete([...seed, { role: 'ai', text }])
     } catch (err) {
-      setMessages(prev => [
-        ...prev.slice(0, -1),
-        { role: 'ai', text: parseGeminiError(err) },
-      ])
+      // #region agent log
+      console.error('[DBG-5b1d79] startChat catch fired', {errMessage: err?.message?.slice(0, 300)})
+      // #endregion
+      setMessages([{ role: 'ai', text: parseGeminiError(err) }])
     } finally {
       setIsLoading(false)
     }

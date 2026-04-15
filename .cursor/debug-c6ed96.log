@@ -3,3 +3,9 @@
 {"sessionId":"c6ed96","location":"Gateway.jsx:6","message":"Gateway rendered","data":{"setModeType":"function"},"timestamp":1776221190604,"runId":"run1","hypothesisId":"H-B"}
 {"sessionId":"c6ed96","location":"FeedbackWelcome.jsx:58","message":"FeedbackWelcome rendered","data":{"setTierType":"function"},"timestamp":1776221190611,"runId":"run1","hypothesisId":"H-D"}
 {"sessionId":"c6ed96","location":"Gateway.jsx:6","message":"Gateway rendered","data":{"setModeType":"function"},"timestamp":1776221195662,"runId":"run1","hypothesisId":"H-B"}
+{"sessionId":"c6ed96","location":"main.jsx:17","message":"App boot — path at mount","data":{"path":"/"},"timestamp":1776222854550,"runId":"run1","hypothesisId":"H-C"}
+{"sessionId":"c6ed96","location":"Gateway.jsx:6","message":"Gateway rendered","data":{"setModeType":"function"},"timestamp":1776222854561,"runId":"run1","hypothesisId":"H-B"}
+{"sessionId":"c6ed96","location":"Gateway.jsx:6","message":"Gateway rendered","data":{"setModeType":"function"},"timestamp":1776222858216,"runId":"run1","hypothesisId":"H-B"}
+{"sessionId":"c6ed96","location":"Chat.jsx:52","message":"Chat rendered past handleIntakeComplete — no crash yet","data":{"tier":2,"mode":"intake"},"timestamp":1776222864058,"runId":"run1","hypothesisId":"H-A"}
+{"sessionId":"c6ed96","location":"Chat.jsx:52","message":"Chat rendered past handleIntakeComplete — no crash yet","data":{"tier":2,"mode":"intake"},"timestamp":1776222864069,"runId":"run1","hypothesisId":"H-A"}
+{"sessionId":"c6ed96","location":"Chat.jsx:52","message":"Chat rendered past handleIntakeComplete — no crash yet","data":{"tier":2,"mode":"intake"},"timestamp":1776222864344,"runId":"run1","hypothesisId":"H-A"}
