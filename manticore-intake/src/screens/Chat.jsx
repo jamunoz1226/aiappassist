@@ -49,7 +49,7 @@ export default function Chat() {
       setIsGeneratingSummary(false)
     }
   }, [setGlobalMessages, setSummary, navigate])
-
+s
   const { messages, chips, isLoading, questionIndex, totalQuestions, startChat, sendMessage } = useChat(tier, handleIntakeComplete, mode)
 
   // Tracks only finalized speech segments so interim previews never double-count
